@@ -167,8 +167,9 @@
       }
     },
     "upload_options": {
-      "icon": "pros",
-      "description": "PROS Driving Program"
+      "icon": "clawbot",
+      "description": "PROS Driving Program",
+      "slot": 2
     }
   }
 }

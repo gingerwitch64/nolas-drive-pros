@@ -75,19 +75,30 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor left_mtr(1);
-	pros::Motor right_mtr(2);
+	pros::Motor drv_l(1); // Left drive
+	pros::Motor drv_r(2); // Right drive
+	pros::Motor whl_l(6); // Upper spinner wheel
+	pros::Motor whl_u(7); // Lower spinner wheel
 
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
 		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
-		int left = master.get_analog(ANALOG_LEFT_Y);
-		int right = master.get_analog(ANALOG_RIGHT_Y);
+		int left = clamp(master.get_analog(ANALOG_LEFT_Y)); // Left drive global values
+		int right = clamp(master.get_analog(ANALOG_RIGHT_Y)); // Right drive global values
 
-		left_mtr = left;
-		right_mtr = right;
+		drv_l = left;
+		drv_r = right;
+
+		if (master.get_digital(DIGITAL_R1)) {} else
+		if (master.get_digital(DIGITAL_L1)) {};
 
 		pros::delay(20);
 	}
 }
+
+int clamp(int input, int minint = -127, int maxint = 127) {
+	if (maxint < input) { return maxint; } else
+	if (input < minint) { return minint; } else
+	return input;
+};

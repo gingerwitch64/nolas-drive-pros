@@ -87,8 +87,8 @@ void opcontrol() {
 		int left = clamp(master.get_analog(ANALOG_LEFT_Y)); // Left drive global values
 		int right = clamp(master.get_analog(ANALOG_RIGHT_Y)); // Right drive global values
 
-		drv_l = left;
-		drv_r = right;
+		drv_l.move(left);
+		drv_r.move(right);
 
 		if (master.get_digital(DIGITAL_R1)) {} else
 		if (master.get_digital(DIGITAL_L1)) {};

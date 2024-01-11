@@ -1,5 +1,11 @@
 #include "main.h"
 
+int clamp(int input, int minint = -127, int maxint = 127) {
+	if (maxint < input) { return maxint; } else
+	if (input < minint) { return minint; } else
+	return input;
+};
+
 /**
  * A callback function for LLEMU's center button.
  *
@@ -75,10 +81,10 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor drv_l(1); // Left drive
+	pros::Motor drv_l(1,true); // Left drive
 	pros::Motor drv_r(2); // Right drive
-	pros::Motor whl_l(6); // Upper spinner wheel
-	pros::Motor whl_u(7); // Lower spinner wheel
+	/* pros::Motor whl_l(); // Lower spinner wheel */
+	pros::Motor whl_u(11, 2); // Upper spinner wheel
 
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
@@ -86,19 +92,15 @@ void opcontrol() {
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 		int left = clamp(master.get_analog(ANALOG_LEFT_Y)); // Left drive global values
 		int right = clamp(master.get_analog(ANALOG_RIGHT_Y)); // Right drive global values
+		int essen = 127;
 
-		drv_l = left;
-		drv_r = right;
+		drv_l.move(left);
+		drv_r.move(right);
 
-		if (master.get_digital(DIGITAL_R1)) {} else
-		if (master.get_digital(DIGITAL_L1)) {};
+		if (master.get_digital(DIGITAL_R1)) { /* whl_l.move(essen);*/ whl_u.move(essen); } else
+		if (master.get_digital(DIGITAL_L1)) { /*whl_l.move(-1*essen);*/ whl_u.move(-1*essen); } else
+		{whl_u.move(0);};
 
 		pros::delay(20);
 	}
 }
-
-int clamp(int input, int minint = -127, int maxint = 127) {
-	if (maxint < input) { return maxint; } else
-	if (input < minint) { return minint; } else
-	return input;
-};

@@ -83,8 +83,9 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	pros::Motor drv_l(1,true); // Left drive
 	pros::Motor drv_r(2); // Right drive
-	/* pros::Motor whl_l(); // Lower spinner wheel */
-	pros::Motor whl_u(11, 2); // Upper spinner wheel
+	pros::Motor arm_l(3,true); // Lower spinner wheel */
+	pros::Motor arm_r(4); // Upper spinner wheel
+
 
 	while (true) {
 		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
@@ -92,14 +93,14 @@ void opcontrol() {
 		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
 		int left = clamp(master.get_analog(ANALOG_LEFT_Y)); // Left drive global values
 		int right = clamp(master.get_analog(ANALOG_RIGHT_Y)); // Right drive global values
-		int essen = 127;
+		int arm_speed = 127;
 
 		drv_l.move(left);
 		drv_r.move(right);
 
-		if (master.get_digital(DIGITAL_R1)) { /* whl_l.move(essen);*/ whl_u.move(essen); } else
-		if (master.get_digital(DIGITAL_L1)) { /*whl_l.move(-1*essen);*/ whl_u.move(-1*essen); } else
-		{whl_u.move(0);};
+		if (master.get_digital(DIGITAL_R1)) { arm_l.move(arm_speed); arm_r.move(arm_speed); } else
+		if (master.get_digital(DIGITAL_L1)) { arm_l.move(-1*arm_speed); arm_r.move(-1*arm_speed); } else
+		{arm_l.move(0);arm_r.move(0);};
 
 		pros::delay(20);
 	}

@@ -81,10 +81,11 @@ void autonomous() {}
  */
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	pros::Motor drv_l(1,true); // Left drive
-	pros::Motor drv_r(2); // Right drive
-	pros::Motor arm_l(3,true); // Lower spinner wheel */
-	pros::Motor arm_r(4); // Upper spinner wheel
+	pros::Motor drv_l(12,true); // Left drive
+	pros::Motor drv_r(19); // Right drive
+	pros::Motor arm_l(11,true); // Lower spinner wheel */
+	pros::Motor arm_r(20); // Upper spinner wheel
+	pros::Motor manum(16); // Claw/hand/grabby thingy
 
 
 	while (true) {
@@ -101,6 +102,10 @@ void opcontrol() {
 		if (master.get_digital(DIGITAL_R1)) { arm_l.move(arm_speed); arm_r.move(arm_speed); } else
 		if (master.get_digital(DIGITAL_L1)) { arm_l.move(-1*arm_speed); arm_r.move(-1*arm_speed); } else
 		{arm_l.move(0);arm_r.move(0);};
+		
+		if (master.get_digital(DIGITAL_R2)) { manum.move(arm_speed); } else
+		if (master.get_digital(DIGITAL_L2)) { manum.move(-1*arm_speed); } else
+		{manum.move(0);};
 
 		pros::delay(20);
 	}
